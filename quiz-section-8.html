@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DollyGirls Chatter Training — Section 8 Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #000000; --surface: #0d0d0d; --surface2: #161616; --border: #2a2a2a;
+    --accent: #ff2ecc; --accent-dim: rgba(255,46,204,0.12); --accent-glow: rgba(255,46,204,0.35);
+    --text: #ffffff; --muted: #777777; --success: #ff2ecc; --danger: #ff4466;
+    --success-dim: rgba(255,46,204,0.1); --danger-dim: rgba(255,68,102,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; top: -200px; left: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,46,204,0.08) 0%, transparent 70%); pointer-events: none; animation: drift 12s ease-in-out infinite alternate; }
+  body::after { content: ''; position: fixed; bottom: -200px; right: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,46,204,0.05) 0%, transparent 70%); pointer-events: none; animation: drift2 15s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: translate(0,0); } to { transform: translate(40px,30px); } }
+  @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-30px,-40px); } }
+  .container { width: 100%; max-width: 680px; position: relative; z-index: 1; }
+  .header { text-align: center; margin-bottom: 40px; animation: fadeUp 0.6s ease both; }
+  .badge { display: inline-block; background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); font-family: 'Nunito', sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; padding: 6px 14px; border-radius: 2px; margin-bottom: 20px; }
+  h1 { font-family: 'Nunito', sans-serif; font-size: clamp(26px, 5vw, 40px); font-weight: 900; line-height: 1.1; letter-spacing: -0.5px; }
+  h1 span { color: var(--accent); }
+  .subtitle { color: var(--muted); font-size: 12px; margin-top: 10px; letter-spacing: 1px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 36px; animation: fadeUp 0.6s ease both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .entry-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
+  .entry-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; color: var(--text); font-family: 'Nunito Sans', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; margin-bottom: 24px; }
+  .entry-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .entry-input::placeholder { color: var(--muted); }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+  .info-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; }
+  .info-box .val { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); }
+  .info-box .lbl { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+  .btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 16px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-glow); }
+  .btn:active { transform: translateY(0); }
+  .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .btn-ghost:hover { background: var(--accent-dim); box-shadow: none; }
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .q-counter { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+  .q-counter span { color: var(--accent); font-weight: 600; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; box-shadow: 0 0 8px var(--accent-glow); }
+  .section-tag { display: inline-block; font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 4px 10px; border-radius: 2px; margin-bottom: 14px; }
+  .question-text { font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 700; line-height: 1.5; margin-bottom: 24px; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option { display: flex; align-items: flex-start; gap: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.15s; user-select: none; }
+  .option:hover:not(.locked) { border-color: var(--accent); background: var(--accent-dim); transform: translateX(4px); }
+  .option.selected { border-color: var(--accent); background: var(--accent-dim); }
+  .option.correct { border-color: var(--success); background: var(--success-dim); }
+  .option.wrong { border-color: var(--danger); background: var(--danger-dim); }
+  .option.locked { cursor: default; pointer-events: none; }
+  .opt-letter { min-width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--muted); transition: all 0.2s; flex-shrink: 0; }
+  .option.selected .opt-letter { border-color: var(--accent); color: var(--accent); }
+  .option.correct .opt-letter { border-color: var(--success); color: var(--success); background: var(--success-dim); }
+  .option.wrong .opt-letter { border-color: var(--danger); color: var(--danger); background: var(--danger-dim); }
+  .opt-text { font-size: 13px; line-height: 1.5; padding-top: 3px; }
+  .feedback { margin-top: 18px; padding: 14px 18px; border-radius: 8px; font-size: 12px; line-height: 1.6; display: none; animation: fadeUp 0.3s ease both; }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: var(--success-dim); border: 1px solid var(--success); color: var(--success); }
+  .feedback.wrong-fb { background: var(--danger-dim); border: 1px solid var(--danger); color: var(--danger); }
+  .nav { margin-top: 24px; }
+  .result-score { text-align: center; padding: 32px 0 24px; }
+  .score-ring { position: relative; width: 130px; height: 130px; margin: 0 auto 20px; }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring circle { fill: none; stroke-width: 8; stroke-linecap: round; }
+  .ring-bg { stroke: var(--border); }
+  .ring-fill { transition: stroke-dashoffset 1s ease; }
+  .score-num { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+  .score-num .big { font-family: 'Nunito', sans-serif; font-size: 32px; font-weight: 800; }
+  .score-num .pct { font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+  .result-label { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .result-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+  .result-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+  .rb-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  .rb-box .num { font-family: 'Nunito', sans-serif; font-size: 28px; font-weight: 800; }
+  .rb-box .lbl { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+  .rb-box.pass .num { color: var(--success); }
+  .rb-box.fail .num { color: var(--danger); }
+  .sending-msg { text-align: center; font-size: 11px; color: var(--muted); margin-bottom: 16px; letter-spacing: 1px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Section 8 — Money & Problem Handling</div>
+    <h1><span>Dolly</span>Girls. Knowledge Quiz</h1>
+    <p class="subtitle">Niche Requests · Content · Off-Platform · Rejection · Refunds · After Care · Closing</p>
+  </div>
+
+  <div class="card screen active" id="screen-entry">
+    <label class="entry-label" for="tg-input">Your Telegram Username</label>
+    <input class="entry-input" id="tg-input" type="text" placeholder="@yourusername" autocomplete="off"/>
+    <div class="info-grid">
+      <div class="info-box"><div class="val">35</div><div class="lbl">Questions</div></div>
+      <div class="info-box"><div class="val">80%</div><div class="lbl">Pass Mark</div></div>
+    </div>
+    <button class="btn" onclick="startQuiz()">Begin Assessment</button>
+  </div>
+
+  <div class="card screen" id="screen-quiz">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="q-counter">Question <span id="q-num">1</span> of <span id="q-total">35</span></span>
+        <span class="q-counter"></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="section-tag" id="section-tag"></div>
+    <div class="question-text" id="question-text"></div>
+    <div class="options" id="options-list"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav"><button class="btn" id="next-btn" style="display:none" onclick="nextQuestion()">Next Question →</button></div>
+  </div>
+
+  <div class="card screen" id="screen-results">
+    <div class="result-score">
+      <div class="score-ring">
+        <svg viewBox="0 0 120 120" width="130" height="130">
+          <circle class="ring-bg" cx="60" cy="60" r="52"/>
+          <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+        </svg>
+        <div class="score-num">
+          <div class="big" id="score-pct">0%</div>
+          <div class="pct">SCORE</div>
+        </div>
+      </div>
+      <div class="result-label" id="result-label"></div>
+      <div class="result-sub" id="result-sub"></div>
+    </div>
+    <div class="result-breakdown">
+      <div class="rb-box pass"><div class="num" id="r-correct">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-box fail"><div class="num" id="r-wrong">0</div><div class="lbl">Incorrect</div></div>
+    </div>
+    <div class="sending-msg" id="sending-msg">Saving your result...</div>
+    <button class="btn btn-ghost" onclick="retryQuiz()">Retake Quiz</button>
+  </div>
+
+</div>
+<script>
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwtD6KkKFgbk4oC2BTnQNWP6xbjUrYQp3gWt0zjGDIj3enzmR_z8dnVL38hAz9Nw0dx/exec";
+const SECTION_NAME = "Section 8 – Money & Problem Handling";
+const TOTAL = 35;
+
+const questions = [
+
+  // ── NICHE REQUESTS (6)
+  {
+    section: "Niche Requests",
+    q: "A fan requests something unusual before entering a private. What must you do before agreeing?",
+    opts: [
+      "Agree immediately to secure the sale — you can sort the details once they're inside",
+      "Pause the funnel, check with the model first, and confirm she is comfortable before proceeding",
+      "Quote a higher price to compensate for the unusual nature of the request",
+      "Tell the fan the request is not available without asking the model"
+    ],
+    ans: 1,
+    fb: "Always pause the funnel for niche requests and check with the model first. Confirm she is comfortable, happy to do it in private, and that it is not something she avoids. Never assume. Protecting the model comes before making the sale."
+  },
+  {
+    section: "Niche Requests",
+    q: "Why is short-term money never worth selling something the model hasn't approved?",
+    opts: [
+      "Because the fan will always ask for a refund afterwards",
+      "Because it risks bad reviews, damages fan trust, makes the model uncomfortable, and hurts long-term earnings",
+      "Because platform rules prohibit unapproved content",
+      "Because managers will always find out and discipline you"
+    ],
+    ans: 1,
+    fb: "Short-term money is never worth long-term damage. Selling unapproved content risks bad reviews, damages trust with the fan, makes the model uncomfortable, and affects long-term earnings. You are working as a team — short-term gains that damage the operation are not acceptable."
+  },
+  {
+    section: "Niche Requests",
+    q: "A fan tips first and then requests something niche. The model seems uncomfortable. What is the correct approach?",
+    opts: [
+      "Pressure the model to deliver since the fan has already paid",
+      "Tell the fan the model will do it — she will adapt once in private",
+      "Make clear to the model it is completely fine if she doesn't want to do it, and follow the refund procedure if needed",
+      "Ask the fan to wait while you negotiate with the model privately"
+    ],
+    ans: 2,
+    fb: "Even when a fan has already tipped, the model's comfort always comes first. Never pressure her because money has been sent. Clearly tell her it is completely fine to decline — they tipped before asking. If she says no, follow the refund procedure. Refunding correctly is better than damaging the account."
+  },
+  {
+    section: "Niche Requests",
+    q: "The model declines a niche request. How should you handle this with the fan?",
+    opts: [
+      "Tell the fan directly that the model refused",
+      "End the conversation immediately",
+      "Politely decline and redirect to something similar she does enjoy — keep the energy and momentum going",
+      "Offer a significant discount on something else to compensate"
+    ],
+    ans: 2,
+    fb: "When the model declines, do not just say no and kill the energy. Politely decline, redirect to something similar she is comfortable with, and keep momentum going. Something like: 'could we do something else? The idea of [alternative] turns me on so much more.' Keep money in the room without crossing lines."
+  },
+  {
+    section: "Niche Requests",
+    q: "What is your primary goal when funnelling fans, according to the niche requests training?",
+    opts: [
+      "Selling as many tip menu items as possible per session",
+      "Funnelling fans into privates or Teams calls — these are the highest earning areas",
+      "Building long-term relationships before attempting any conversion",
+      "Maximising public tipping before attempting a private"
+    ],
+    ans: 1,
+    fb: "Your primary goal is always to funnel fans into Privates or Teams calls — these are the highest earning areas. Everything else supports this. However, you must never sell something the model is not comfortable with. The goal and the protection of the model must always coexist."
+  },
+  {
+    section: "Niche Requests",
+    q: "A fan is already inside a private and requests something new that you know the model does not do. What do you do?",
+    opts: [
+      "Let the model handle it herself since she is already in the private",
+      "Tell the fan it is not available and end the private immediately",
+      "Communicate quickly and clearly to the model — make clear she does not need to do anything she is uncomfortable with and that it was a new request not mentioned in chat",
+      "Agree to it and apologise to the model afterwards"
+    ],
+    ans: 2,
+    fb: "Communicate quickly and clearly. Make it clear to the model that she does not need to do anything she is uncomfortable with, and that the fan never mentioned this beforehand — it is a new request. Never pressure her because they already paid. Her comfort always comes first, even mid-private."
+  },
+
+  // ── CONTENT REQUESTS (5)
+  {
+    section: "Content Requests",
+    q: "A fan requests custom content. What is the very first thing you should do?",
+    opts: [
+      "Agree to the request and quote a price immediately",
+      "Ask a manager or experienced team member if the content already exists on the Google Drive",
+      "Ask the model directly without checking the drive first",
+      "Tell the fan to request it again at the end of the stream"
+    ],
+    ans: 1,
+    fb: "The first step is always to check with a manager or experienced team member whether the content already exists on the Google Drive. If it does, request it from there rather than creating new content. Only proceed to commissioning new content if it does not already exist."
+  },
+  {
+    section: "Content Requests",
+    q: "The content does not exist on the drive. What must you confirm with the model before agreeing to anything?",
+    opts: [
+      "That she can deliver it within 24 hours",
+      "That she is willing to create custom content and specifically comfortable with this request",
+      "That the fan has enough tokens to cover the cost",
+      "That the request is not on the banned content list"
+    ],
+    ans: 1,
+    fb: "Confirm two things: that the model is willing to create custom content at all, and that she is specifically comfortable with this particular request. Never assume on either point — always check first."
+  },
+  {
+    section: "Content Requests",
+    q: "How should custom content be priced?",
+    opts: [
+      "Always at a fixed standard rate regardless of the request",
+      "As cheap as possible to encourage conversion",
+      "Based on how specific, time-intensive, or unique the request is — do not be afraid to set high prices for very specific requests",
+      "Always the same price as a standard private show"
+    ],
+    ans: 2,
+    fb: "Price custom content based on how specific, time-intensive, or unique it is. Do not be afraid to set high prices — custom content is premium and fetishes pay well. If the total price is high and the fan is not comfortable paying all at once, you can agree to split 50/50. If unsure how to price, ask a manager."
+  },
+  {
+    section: "Content Requests",
+    q: "Once a custom content request is agreed, where must it be logged?",
+    opts: [
+      "In a private message to the model only",
+      "In the Discord custom content request channel using the existing template, and in the fan's notes",
+      "In a spreadsheet kept by the chatter",
+      "It does not need to be logged — just communicate it verbally to the model"
+    ],
+    ans: 1,
+    fb: "Every custom content request must be logged in two places: the model's custom content request channel in Discord using the existing template, and in the fan's notes. This keeps tracking clean and avoids confusion or forgotten requests."
+  },
+  {
+    section: "Content Requests",
+    q: "After custom content has been delivered to the fan, what must you do?",
+    opts: [
+      "Nothing — once delivered the process is complete",
+      "Ask the fan for a review",
+      "Update the status from pending to fulfilled so the loop is closed",
+      "Delete the request from the notes to keep things tidy"
+    ],
+    ans: 2,
+    fb: "Once custom content is delivered, always update the status from pending to fulfilled. Close the loop every time. This keeps the tracking system clean and ensures nothing is left open or forgotten."
+  },
+
+  // ── OFF PLATFORM (6)
+  {
+    section: "Off-Platform",
+    q: "A fan on StripChat asks for your Telegram. What is the correct response?",
+    opts: [
+      "Give it to them if they are a high spender",
+      "Tell them you will share it privately — not in the public chat",
+      "Keep everything on-platform: 'We keep everything on here babe ❤️' — no exceptions",
+      "Ask a manager if they are allowed to have it"
+    ],
+    ans: 2,
+    fb: "On StripChat, we do not move anyone off platform at all. No WhatsApp, Telegram, Snapchat, personal numbers, direct PayPal deals, or OnlyFans. Keep it simple and firm: 'We keep everything on here babe.' Do not negotiate, do not hint, do not suggest alternatives."
+  },
+  {
+    section: "Off-Platform",
+    q: "On Chaturbate, a fan asks about OnlyFans. What is the correct response?",
+    opts: [
+      "Never mention OnlyFans on Chaturbate under any circumstances",
+      "Proactively tell every fan about the OnlyFans account to drive subscriptions",
+      "Only hint towards it if the fan asks and links are in the bio — something like 'if you want to talk when I'm not streaming my OF is in my bio'",
+      "Share the OnlyFans link directly in the public chat"
+    ],
+    ans: 2,
+    fb: "On Chaturbate you can hint towards OnlyFans only if the fan asks and links are tagged in the bio. A natural line is: 'If you want to talk when I'm not streaming my OF is in my bio x.' Never proactively push it — only funnel if asked or if the manager instructs you to."
+  },
+  {
+    section: "Off-Platform",
+    q: "On MFC, what is the only permitted reason to move a fan off-platform?",
+    opts: [
+      "If they are a high spender who specifically requests it",
+      "For Teams video calls only — structured pricing, manager involvement required",
+      "For casual messaging on WhatsApp if they are a regular",
+      "For any off-platform interaction as long as the manager is aware"
+    ],
+    ans: 1,
+    fb: "On MFC, off-platform movement is only permitted for Teams video calls — not chatting, not casual messaging, not social apps. Starting price is $10 per minute, minimum $6, with a 4–5 minute minimum. Manager must be informed immediately and handles payment setup. Never handle payment yourself."
+  },
+  {
+    section: "Off-Platform",
+    q: "A high-spending fan on StripChat asks to move off platform. What do you do?",
+    opts: [
+      "Move them off platform immediately — high spenders are always allowed",
+      "Decline politely without being rude, and speak to a manager as they may be subject to the Whale Method",
+      "Give them the model's Telegram since they have already proven they spend",
+      "Tell them it is against the rules and explain why in detail"
+    ],
+    ans: 1,
+    fb: "High spenders asking to move off platform are handled strategically. Find a polite way to decline — something like 'I don't use other platforms.' If they are a very high spender, speak to a manager as they may be subject to the Whale Method. Never move anyone off StripChat yourself."
+  },
+  {
+    section: "Off-Platform",
+    q: "On StripChat, a fan mentions OnlyFans. How do you handle it?",
+    opts: [
+      "Confirm the model has an OnlyFans and share the link",
+      "Avoid saying 'OnlyFans' — instead say something like 'you can check my spicy link on her IG'",
+      "Ignore the question completely and change the subject",
+      "Tell them OnlyFans is not available for this model"
+    ],
+    ans: 1,
+    fb: "On StripChat you must avoid saying the word 'OnlyFans'. Instead redirect with something like: 'You can check my spicy link on her IG.' Never directly agree to talk on OF or Instagram — keep it indirect and platform-safe."
+  },
+  {
+    section: "Off-Platform",
+    q: "Why do we not move fans off-platform on most platforms?",
+    opts: [
+      "Because it is against company policy to communicate with fans outside of work hours",
+      "To protect the account, prevent bans, keep revenue tracked, avoid chargebacks, and maintain platform security",
+      "Because fans tend to spend less when taken off-platform",
+      "Because the model prefers all communication to stay on-platform"
+    ],
+    ans: 1,
+    fb: "We do not move fans off-platform because it protects the account, prevents bans, keeps revenue tracked, avoids chargebacks, and maintains platform security. One wrong move can risk the entire account. We do not take unnecessary risks."
+  },
+
+  // ── HANDLING REJECTION (6)
+  {
+    section: "Handling Rejection",
+    q: "A fan says 'too expensive' when you mention a private. What is the correct response?",
+    opts: [
+      "Immediately offer a discount to keep them engaged",
+      "Get defensive and explain the value of the private in detail",
+      "Stay calm, hold the price firmly, and state it simply without over-explaining or justifying",
+      "End the conversation and move to another fan"
+    ],
+    ans: 2,
+    fb: "When a fan pushes back on price, hold firm calmly and simply state the rate. Do not over-explain, do not justify, and do not drop the price. Most fans asking for discounts were never serious — they are testing whether you will panic. Confidence sells more than discounts. Value must be protected."
+  },
+  {
+    section: "Handling Rejection",
+    q: "Why is it so important never to show frustration when a fan says no?",
+    opts: [
+      "Because the platform may ban the account for negative interactions",
+      "Because fans can feel energy through text — frustration lowers your authority and reduces the chance they ever spend",
+      "Because managers monitor all chats for emotional responses",
+      "Because it reflects badly on the model's public persona"
+    ],
+    ans: 1,
+    fb: "Fans feel energy through text. The moment you show frustration, desperation, or irritation, you lower your authority and reduce the chance of them spending — now or ever. If you sound calm and unbothered, you stay in control. Rejection is part of sales. Expect it. Never fear it."
+  },
+  {
+    section: "Handling Rejection",
+    q: "Which of the following is an example of what NOT to say after a fan rejects a private?",
+    opts: [
+      "'That's okay, maybe another day haha. Appreciate you being here'",
+      "'No worries, feel free to watch 😊'",
+      "'Don't you think I deserve it' or 'Come on babe I know you have the money'",
+      "Sending a shorter, lighter reply and moving your focus elsewhere"
+    ],
+    ans: 2,
+    fb: "Never say things like 'Don't you think I deserve it' or 'Come on babe I know you have the money' or 'I thought we had such a good connection.' These are emotional, desperate, and pushy — exactly the wrong energy. A simple 'That's okay, maybe another day haha' is correct. Stay calm and unbothered."
+  },
+  {
+    section: "Handling Rejection",
+    q: "A fan says 'maybe later' for the third time across multiple sessions but never tips. How do you handle this?",
+    opts: [
+      "Push harder this session since they keep returning",
+      "Offer a special deal to finally convert them",
+      "Classify them as a time waster, reduce your investment with shorter and slower replies, and focus energy on spenders",
+      "Ask them directly why they never follow through"
+    ],
+    ans: 2,
+    fb: "A fan who says 'maybe later' consistently across multiple sessions without ever tipping is a time waster. Reduce your investment — shorter replies, slower replies, less flirty escalation. Shift your focus to fans who earn. Never be rude, but protect your energy for where it matters."
+  },
+  {
+    section: "Handling Rejection",
+    q: "Why should you never burn a bridge with a fan who rejects you today?",
+    opts: [
+      "Because they might leave a bad review if you react badly",
+      "Because many regulars started as non-spenders — a fan who says no today may spend tomorrow or next week",
+      "Because platform rules require you to stay polite at all times",
+      "Because the model may know them personally"
+    ],
+    ans: 1,
+    fb: "Many regulars started as non-spenders. A fan who says no today might spend tomorrow. If you react badly you close the door permanently. Stay polite, stay playful, stay in control. This is long-term money — not just instant conversion."
+  },
+  {
+    section: "Handling Rejection",
+    q: "What does handling rejection well demonstrate about a chatter's skill level?",
+    opts: [
+      "That they are good at remembering scripts",
+      "That they understand platform rules thoroughly",
+      "That they are managing psychology — staying calm and firm increases perceived value and converts more over time",
+      "That they have a high volume of conversations running simultaneously"
+    ],
+    ans: 2,
+    fb: "Handling rejection properly is what separates average chatters from high earners. You are managing psychology, not just messages. When you stay calm, confident, and firm you increase perceived value. When you get emotional, you reduce it. Rejection is not a problem — it is part of the process."
+  },
+
+  // ── REFUND PROCEDURE (5)
+  {
+    section: "Refund Procedure",
+    q: "Can you process a refund yourself without manager approval?",
+    opts: [
+      "Yes — if the situation is clearly justified you can process it immediately",
+      "Yes — but only for amounts under 100 tokens",
+      "No — always ask a manager before issuing any refund. Manager sign-off is required every time",
+      "Only on StripChat where the process is straightforward"
+    ],
+    ans: 2,
+    fb: "You must always ask a manager before issuing any refund — no exceptions. Some fans may try to trick chatters or create confusion to get free tokens. Manager sign-off is required every single time. Never process a refund on your own without approval."
+  },
+  {
+    section: "Refund Procedure",
+    q: "On which platform can you directly refund tokens, and what do you do on platforms where you cannot?",
+    opts: [
+      "All platforms support direct token refunds",
+      "StripChat allows direct token refunds. On MFC and Chaturbate you cannot refund directly — instead offer other content or have the model do something simple to keep the viewer happy",
+      "MFC allows direct refunds. On StripChat and Chaturbate you must escalate to the platform support team",
+      "No platforms allow direct refunds — all must go through platform support"
+    ],
+    ans: 1,
+    fb: "On StripChat you can refund tokens directly. On MFC and Chaturbate you cannot refund directly — in those cases offer other content or have the model do something simple to keep the viewer happy. Always handle with care and with manager oversight regardless of platform."
+  },
+  {
+    section: "Refund Procedure",
+    q: "A fan disconnects during a private due to their own Wi-Fi issues and demands a full refund. How do you assess this?",
+    opts: [
+      "Always refund immediately — any disconnection justifies a refund",
+      "Never refund disconnections — it is always the fan's responsibility",
+      "Use logical reasoning to determine if the experience was properly delivered. If unsure, ask a manager before proceeding",
+      "Offer a 50% refund as a compromise without manager involvement"
+    ],
+    ans: 2,
+    fb: "Some fans try to use refund requests as a cheap way to get money back and spend on another model. Use logical reasoning to determine if the request was properly delivered. If you are unsure whether a refund is justified, ask a manager before doing anything. Never act alone on a refund decision."
+  },
+  {
+    section: "Refund Procedure",
+    q: "While waiting for manager approval on a refund, how should you communicate with the fan?",
+    opts: [
+      "Tell them the refund is already being processed to keep them happy",
+      "Ignore them until the manager responds",
+      "Be polite and reassuring — let them know you are checking the situation without making immediate promises",
+      "Tell them refunds are not guaranteed and they may not receive one"
+    ],
+    ans: 2,
+    fb: "While waiting for manager approval, stay polite and reassuring. Let the fan know you are checking the situation — do not make promises you cannot keep yet. Keep the tone helpful and neutral. Never directly argue with viewers during a refund situation."
+  },
+  {
+    section: "Refund Procedure",
+    q: "What is the core principle behind the refund procedure?",
+    opts: [
+      "Always side with the fan to protect the account's reputation",
+      "Never issue refunds — they set a bad precedent",
+      "Fairness — treating genuine fans well while protecting against abuse. Always escalate first, then act",
+      "Speed — process refunds as fast as possible to avoid bad reviews"
+    ],
+    ans: 2,
+    fb: "Refunds are about fairness — making sure genuine fans are treated well while protecting against abuse. The core principle is always escalate first, then act. Never rush the process and never act without manager oversight."
+  },
+
+  // ── AFTER CARE (4)
+  {
+    section: "After Care",
+    q: "A private show ends normally and the fan says goodbye. What is the correct response?",
+    opts: [
+      "Immediately move on to the next conversation without acknowledging the end",
+      "Respond warmly and genuinely — thank them, acknowledge the experience, and smoothly return to the room",
+      "Ask them immediately if they want to go private again",
+      "Send a tip request before they leave"
+    ],
+    ans: 1,
+    fb: "When a private ends normally, respond warmly and genuinely. Thank them and acknowledge the experience — something like 'Thank you, I really enjoyed that' or 'That was fun — appreciate you.' Keep the tone friendly and then smoothly resume chatting with the room."
+  },
+  {
+    section: "After Care",
+    q: "A private show ends abruptly and you are not sure why. What should you do immediately?",
+    opts: [
+      "Assume the session is over and send a closing message",
+      "Check with the model immediately — the fan may have disconnected due to Wi-Fi or run out of tokens and may be topping up to return",
+      "Send the fan a message asking if they are coming back",
+      "Issue a refund straight away to be safe"
+    ],
+    ans: 1,
+    fb: "Do not assume an abrupt end means it is over. Immediately check with the model — there is a good chance the fan disconnected due to Wi-Fi or ran out of tokens and is topping up to return. Stay neutral, keep the door open, and be ready to continue if they rejoin."
+  },
+  {
+    section: "After Care",
+    q: "Why is after care described as mandatory after every single private show?",
+    opts: [
+      "Because platforms require a post-session message within a set time window",
+      "Because consistency builds better relationships with fans and increases repeat spending over time",
+      "Because managers review after care messages during performance checks",
+      "Because it is the only way to request a review from the fan"
+    ],
+    ans: 1,
+    fb: "After care is mandatory every time because consistency builds better relationships and increases repeat spending over time. It is also about the final impression — a good ending leaves fans feeling valued and more likely to come back. Never skip it."
+  },
+  {
+    section: "After Care",
+    q: "What is the risk of acting like a private session is finished when a fan may be returning?",
+    opts: [
+      "The fan may feel ignored and leave a bad review",
+      "Using closing language while the fan is in the process of returning can create a bad experience or lose the session entirely",
+      "It triggers a platform penalty for ending sessions early",
+      "The model may become confused about whether the session is still active"
+    ],
+    ans: 1,
+    fb: "If you act like the session is finished — using closing language, moving on — while the fan is actually returning, it can create a bad experience or lose the session entirely. Always respond as if the fan could return at any moment. Patience here protects revenue."
+  },
+
+  // ── CLOSING CHATS (3)
+  {
+    section: "Closing Chats",
+    q: "When the stream ends, what must you do before logging off?",
+    opts: [
+      "Send a closing message to the last 3 fans you were speaking to",
+      "Check every open conversation and send a closing message to each fan — miss no one",
+      "Post in Discord that the stream has ended",
+      "Log the session summary in the model's notes"
+    ],
+    ans: 1,
+    fb: "When the stream ends, check every single open conversation and send a closing message to each fan. Miss no one. Fans left mid-conversation feel ignored and are less likely to return. A good close takes 2 minutes and protects weeks of relationship building."
+  },
+  {
+    section: "Closing Chats",
+    q: "What must every closing message include?",
+    opts: [
+      "A tip request for the next session",
+      "When the model will next be live — always let fans know when to come back",
+      "A summary of what was discussed in the conversation",
+      "A link to the model's OnlyFans"
+    ],
+    ans: 1,
+    fb: "Every closing message must mention when the model will next be live. Always let fans know when to come back. Keep it warm, short, and positive. The goal is to leave every fan feeling positive and looking forward to the next stream."
+  },
+  {
+    section: "Closing Chats",
+    q: "A fan gets frustrated when you say you are logging off. How do you handle it?",
+    opts: [
+      "Extend the session to avoid the conflict",
+      "Apologise repeatedly and explain in detail why the stream is ending",
+      "Stay calm, send one warm reply such as 'I know, timing sucks — I'll be back soon and it'll be worth the wait,' then do not open any more messages from them",
+      "Ignore their frustration and stick to a standard closing message"
+    ],
+    ans: 2,
+    fb: "Stay calm. Never argue. Never over-explain. One warm reply is enough — something like 'I know, timing sucks 😩 — I'll be back soon and it'll be worth the wait.' After sending the closing message, do not open any further messages from that viewer. A last impression is a lasting impression."
+  }
+
+];
+
+// ── STATE
+let telegramName = "", currentQ = 0, score = 0, answered = false, shuffled = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  const raw = document.getElementById('tg-input').value.trim();
+  if (!raw) { document.getElementById('tg-input').focus(); return; }
+  telegramName = raw.startsWith('@') ? raw : '@' + raw;
+  shuffled = shuffle(questions);
+  currentQ = 0; score = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+document.getElementById('tg-input').addEventListener('keydown', e => { if (e.key === 'Enter') startQuiz(); });
+
+function renderQuestion() {
+  answered = false;
+  const q = shuffled[currentQ];
+  const letters = ['A','B','C','D'];
+  document.getElementById('q-num').textContent = currentQ + 1;
+  document.getElementById('section-tag').textContent = q.section;
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('progress-fill').style.width = ((currentQ / TOTAL) * 100) + '%';
+  document.getElementById('next-btn').style.display = 'none';
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback'; fb.textContent = '';
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = `<div class="opt-letter">${letters[i]}</div><div class="opt-text">${opt}</div>`;
+    div.onclick = () => selectAnswer(i);
+    list.appendChild(div);
+  });
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = shuffled[currentQ];
+  const options = document.querySelectorAll('.option');
+  options.forEach(o => o.classList.add('locked'));
+  options[idx].classList.add('selected');
+  const fb = document.getElementById('feedback');
+  if (idx === q.ans) {
+    score++;
+    options[idx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.textContent = '✓ Correct — ' + q.fb;
+  } else {
+    options[idx].classList.add('wrong');
+    options[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.textContent = '✗ Incorrect — ' + q.fb;
+  }
+  document.getElementById('next-btn').style.display = 'block';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ < TOTAL) { renderQuestion(); } else { showResults(); }
+}
+
+function showResults() {
+  showScreen('screen-results');
+  const pct = Math.round((score / TOTAL) * 100);
+  const passed = pct >= 80;
+  document.getElementById('score-pct').textContent = pct + '%';
+  document.getElementById('score-pct').style.color = passed ? 'var(--success)' : 'var(--danger)';
+  document.getElementById('r-correct').textContent = score;
+  document.getElementById('r-wrong').textContent = TOTAL - score;
+  document.getElementById('result-label').textContent = passed ? '🎉 You Passed!' : '❌ Not Quite';
+  document.getElementById('result-label').style.color = passed ? 'var(--success)' : 'var(--danger)';
+  document.getElementById('result-sub').textContent = passed
+    ? `Great work, ${telegramName}. You're cleared to move forward.`
+    : `${telegramName}, you needed 80% to pass. Review the material and try again.`;
+  const ring = document.getElementById('ring-fill');
+  ring.style.stroke = passed ? 'var(--success)' : 'var(--danger)';
+  setTimeout(() => { ring.style.strokeDashoffset = 326.7 - (326.7 * pct / 100); }, 100);
+  sendToSheets(telegramName, pct, score, passed);
+}
+
+function retryQuiz() {
+  shuffled = shuffle(questions);
+  currentQ = 0; score = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+async function sendToSheets(telegram, pct, correct, passed) {
+  const msg = document.getElementById('sending-msg');
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        telegram, section: SECTION_NAME, score: pct,
+        correct, wrong: TOTAL - correct,
+        passed: passed ? "PASS" : "FAIL",
+        timestamp: new Date().toISOString()
+      })
+    });
+    msg.textContent = "✓ Result saved successfully.";
+  } catch (e) {
+    msg.textContent = "⚠ Could not save result — check webhook URL.";
+  }
+}
+</script>
+</body>
+</html>
